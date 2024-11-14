@@ -19,9 +19,9 @@ return new class extends Migration
             $table->date('expiry');
             $table->timestamps();
 
-            // $table->foreign('t_id')->references('transaction_id')->on('transactions')->onDelete('cascade');
-            // $table->foreign('u_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreign('plan_id')->references('plan_id')->on('plans')->onDelete('cascade');
+            $table->foreign('t_id')->references('transaction_id')->on('transactions')->onDelete('cascade');
+            $table->foreign('u_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('plan_id')->references('plan_id')->on('plans')->onDelete('cascade');
         });
     }
 

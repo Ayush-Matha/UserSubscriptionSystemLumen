@@ -21,8 +21,8 @@ return new class extends Migration
             $table->json('payment_option_details');
             $table->timestamps();
 
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreign('plan_id')->references('plan_id')->on('plans')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('plan_id')->references('plan_id')->on('plans')->onDelete('cascade');
         });
 
         // Create a trigger to insert a subscription after a new transaction is created
