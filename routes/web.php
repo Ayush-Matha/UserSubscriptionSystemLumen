@@ -34,6 +34,7 @@ $router->group(['middleware' => ['auth:api', 'verify_access']], function () use 
 //Plans Routes
 $router->post('/insert-plan', 'PlansController@insertPlan');
 $router->get('/all-plans', 'PlansController@getPlans');
+$router->get('/get-plan-by-id/{id}', 'PlansController@getPlanById');
 $router->post('/update-plan', 'PlansController@updatePlan');
 
 //Transaction Routes
