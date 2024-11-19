@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->bigIncrements('plan_id');
             $table->string('name');
-            $table->integer('amount');
-            $table->integer('validity');
+            $table->json('amount');
             $table->string('description');
         });
     }

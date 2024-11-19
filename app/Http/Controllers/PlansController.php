@@ -33,22 +33,39 @@ class PlansController extends Controller
         $planId = $request->input('plan_id');
         $name = $request->input('name');
         $amount = $request->input('amount');
-        $validity = $request->input('validity');
         $description = $request->input('description');
 
         // Validate the inputs
         $this->validate($request,[
         'plan_id' => 'required|exists:plans,plan_id',
         'name' => 'required|string|max:255',
-        'amount' => 'required|numeric',
-        'validity' => 'required|integer',
+        'amount' => [
+            'required',
+            'json',
+            function ($attribute, $value, $fail) {
+                $decodedValue = json_decode($value, true);
+                // Check if the decoding failed or the required keys are missing
+                if (!is_array($decodedValue) || !isset($decodedValue['monthly'], $decodedValue['yearly'])) {
+                    return $fail('The ' . $attribute . ' must be a JSON object containing both "monthly" and "yearly" properties.');
+                }
+
+                // Check if there are any additional keys
+                if (count(array_diff(array_keys($decodedValue), ['monthly', 'yearly'])) > 0) {
+                    return $fail('The ' . $attribute . ' must only contain the "monthly" and "yearly" properties.');
+                }
+
+                // Check if the values are numeric
+                if (!is_numeric($decodedValue['monthly']) || !is_numeric($decodedValue['yearly'])) {
+                    return $fail('The values for "monthly" and "yearly" in ' . $attribute . ' must be numeric.');
+                }
+            }
+        ],
         'description' => 'required|string'
         ]);
 
-        $updatedPlan = DB::update("UPDATE plans SET name = ?, amount = ?, validity = ?, description = ? WHERE plan_id = ?", [
+        $updatedPlan = DB::update("UPDATE plans SET name = ?, amount = ?, description = ? WHERE plan_id = ?", [
                                 $name,
                                 $amount,
-                                $validity,
                                 $description,
                                 $planId
                             ]);
@@ -73,22 +90,39 @@ class PlansController extends Controller
         // Validate the request data
         $this->validate($request,[
             'name' => 'required|string|max:255',
-            'amount' => 'required|numeric',
-            'validity' => 'required|integer',
+            'amount' => [
+                'required',
+                'json',
+                function ($attribute, $value, $fail) {
+                    $decodedValue = json_decode($value, true);
+                    // Check if the decoding failed or the required keys are missing
+                    if (!is_array($decodedValue) || !isset($decodedValue['monthly'], $decodedValue['yearly'])) {
+                        return $fail('The ' . $attribute . ' must be a JSON object containing both "monthly" and "yearly" properties.');
+                    }
+
+                    // Check if there are any additional keys
+                    if (count(array_diff(array_keys($decodedValue), ['monthly', 'yearly'])) > 0) {
+                        return $fail('The ' . $attribute . ' must only contain the "monthly" and "yearly" properties.');
+                    }
+
+                    // Check if the values are numeric
+                    if (!is_numeric($decodedValue['monthly']) || !is_numeric($decodedValue['yearly'])) {
+                        return $fail('The values for "monthly" and "yearly" in ' . $attribute . ' must be numeric.');
+                    }
+                }
+            ],
             'description' => 'required|string',
         ]);
 
         // Retrieve the validated data from the request
         $name = $request->input('name');
         $amount = $request->input('amount');
-        $validity = $request->input('validity');
         $description = $request->input('description');
 
         // Insert the new plan into the database
-        $inserted = DB::insert("INSERT INTO plans (name, amount, validity, description) VALUES (?, ?, ?, ?)", [
+        $inserted = DB::insert("INSERT INTO plans (name, amount, description) VALUES (?, ?, ?)", [
             $name,
             $amount,
-            $validity,
             $description
         ]);
 
