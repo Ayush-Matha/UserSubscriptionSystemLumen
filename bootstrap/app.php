@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Events\Dispatcher; 
+use Illuminate\Container\Container;
 require_once __DIR__.'/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -48,6 +49,13 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton( 
+    Illuminate\Events\Dispatcher::class, 
+    function () { 
+        return new Dispatcher(new Container); 
+    } 
+);
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -64,6 +72,8 @@ $app->configure('app');
 $app->configure('jwt');
 
 $app->configure('mail');
+
+$app->configure('queue');
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +116,8 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 $app->register(Illuminate\Mail\MailServiceProvider::class);
+
+$app->register(Illuminate\Queue\QueueServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

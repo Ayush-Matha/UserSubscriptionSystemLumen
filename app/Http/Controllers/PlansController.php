@@ -3,17 +3,48 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class PlansController extends Controller
 {
     public function getPlans()
     {
-        $allPlans = DB::select("select * from plans");
+        $key = 'All_Plans';
+
+        if (Cache::has($key)) {
+            $value = Cache::get($key);
+
+            return response()->json([
+                'status' => 'success', 
+                'message' => 'Plan retrived successfully',
+                'data' => $value
+            ], 200);
+        }
+        else
+        {
+            $value = DB::select("select * from plans");
+
+            $ttl = 60; // Time to live in minutes (default: 60)
+
+            // Store in Memcached
+            Cache::put($key, $value, $ttl);
+
+            if (Cache::has($key)) {
+                $value = Cache::get($key);
+    
+                return response()->json([
+                    'status' => 'success', 
+                    'message' => 'Plan retrived successfully',
+                    'data' => $value
+                ], 200);
+            }
+        }
+
         return response()->json([
-            'status' => 'success', 
-            'message' => 'Plan retrived successfully',
-            'data' => $allPlans
-        ], 200);
+            'status' => 'error',
+            'message' => 'Key not found in cache',
+            'data' => null
+        ], 404);
     }
 
     public function getPlanById($id)

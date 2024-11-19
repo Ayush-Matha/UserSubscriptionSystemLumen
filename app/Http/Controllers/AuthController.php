@@ -10,6 +10,8 @@
 		use App\Models\User;
 		use App\Mail\WelcomeEmail; 
 		use Illuminate\Support\Facades\Mail;
+		use App\Jobs\SendWelcomeEmail;
+		use Illuminate\Support\Facades\DB;
 
 		class AuthController extends Controller
 		{
@@ -36,10 +38,12 @@
 						{
 							$details = [ 
 								'title' => 'Welcome to User Subscription Management System', 
-								'body' => $user->name.', your account is successfully created in User Subscription System.' 
+								'body' => $user->name.', your account is successfully created in User Subscription System.' ,
+								'email' => $user->email
 							];
 
-							Mail::to($user->email)->send(new WelcomeEmail($details));
+							// Mail::to($user->email)->send(new WelcomeEmail($details));
+							dispatch(new SendWelcomeEmail($details));
 							return response()->json([
 								'status' => 'success', 
 								'message' => 'User created successfully',
@@ -61,10 +65,13 @@
 				public function login(Request $req)
     			{
 						$email = $req->input('email');
+						$user_id = DB::select('select id from users where email = ?',[$email]);
+						$userId = $user_id[0]->id;
+						$subscription = DB::select('select plan_id, expiry from subscriptions where u_id = ?',[$userId]);
         				$credentials = $req->only(['email', 'password']);
 						try {
 							// Attempt to verify the credentials and create an access token
-							if (!$accessToken = JWTAuth::claims(['token_type' => 'access','email' => $email ])->attempt($credentials)) {
+							if (!$accessToken = JWTAuth::claims(['token_type' => 'access','email' => $email,'subscription' => $subscription ])->attempt($credentials)) {
 								return response()->json([
 									'status' => 'error', 
 									'message' => [
