@@ -23,16 +23,18 @@
     			{
 
         				$this->validate($req, [
-            			'name' => 'required',
-                        'email' => 'required',
+            			'name' => 'required|string',
+                        'email' => 'required|unique:users,email',
+						'mobile' => 'required|digits:10|unique:users,mobile',
             			'password' => 'required|confirmed'
         				]);
 
         				$name = $req->input('name');
-                        $email = $req->input('email');
+                        $email = $req->input('email');	
+						$mobile = $req->input('mobile');
         				$password  = Hash::make($req->input('password'));
 
-       			 		$user = User::create(['name'=>$name, 'email'=>$email, 'password'=>$password]);
+       			 		$user = User::create(['name'=>$name, 'email'=>$email, 'mobile'=>$mobile, 'password'=>$password]);
 
 						if($user)
 						{

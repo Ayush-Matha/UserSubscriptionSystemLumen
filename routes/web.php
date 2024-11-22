@@ -40,7 +40,3 @@ $router->post('/update-plan', 'PlansController@updatePlan');
 //Transaction Routes
 $router->post('/create-transaction','TransactionController@createTransaction');
 
-
-
-
-
