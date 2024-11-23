@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46d00605c06adf3ef73ae87f2642b35a",
+    "content-hash": "0760cdde34b2dead720289e91bd89165",
     "packages": [
         {
             "name": "brick/math",
@@ -1744,7 +1744,7 @@
         },
         {
             "name": "illuminate/log",
-            "version": "v10.48.22",
+            "version": "v10.48.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/log.git",

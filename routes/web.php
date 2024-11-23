@@ -32,11 +32,11 @@ $router->group(['middleware' => ['auth:api', 'verify_access']], function () use 
 });
 
 //Plans Routes
-$router->post('/insert-plan', 'PlansController@insertPlan');
-$router->get('/all-plans', 'PlansController@getPlans');
-$router->get('/get-plan-by-id/{id}', 'PlansController@getPlanById');
-$router->post('/update-plan', 'PlansController@updatePlan');
+$router->post('/plans', 'PlansController@insertPlan');
+$router->get('/plans', 'PlansController@getPlans');
+$router->get('/plans/{id}', 'PlansController@getPlanById');
+$router->put('/plans', 'PlansController@updatePlan');
 
 //Transaction Routes
-$router->post('/create-transaction','TransactionController@createTransaction');
+$router->post('/transactions','TransactionController@createTransaction');
 

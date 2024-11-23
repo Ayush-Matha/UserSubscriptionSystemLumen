@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('amount');
             $table->string('description');
+            $table->timestamps();
         });
     }
 
