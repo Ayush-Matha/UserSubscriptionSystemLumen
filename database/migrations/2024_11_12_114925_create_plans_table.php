@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('plan_id');
             $table->string('name');
             $table->json('amount');
-            $table->string('description');
+            $table->json('description');
             $table->timestamps();
         });
     }

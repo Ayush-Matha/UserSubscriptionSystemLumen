@@ -14,7 +14,6 @@ use App\Mail\SubscriptionMail;
 use Illuminate\Support\Facades\Mail;
 
 
-
 class TransactionController extends Controller
 {
     public function createTransaction(Request $request)
@@ -130,13 +129,13 @@ class TransactionController extends Controller
                         'data' => null,
                     ], 500);
                 }
-        }catch (\Illuminate\Validation\ValidationException $e) {
+        }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Validation error',
                 'errors' => $e->errors(),
             ], 422);
-        }catch (Exception $e) {
+        }catch(Exception $e){
             // Log the exception for debugging
             Log::error('Error in createTransaction: ' . $e->getMessage());
 

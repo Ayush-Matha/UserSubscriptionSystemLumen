@@ -124,7 +124,7 @@ class PlansController extends Controller
                         }
                     }
                 ],
-                'description' => 'required|string'
+                'description' => 'required|json'
                 ]);
     
                 $plan = Plan::find($planId);
@@ -135,6 +135,7 @@ class PlansController extends Controller
                     $plan->amount = $amount;
                     $plan->description = $description;
                     $plan->save();
+                    Cache::flush();
     
                     return response()->json([
                         'status' => 'success', 
@@ -192,7 +193,7 @@ class PlansController extends Controller
                         }
                     }
                 ],
-                'description' => 'required|string',
+                'description' => 'required|json',
             ]);
 
             // Retrieve the validated data from the request
@@ -205,6 +206,7 @@ class PlansController extends Controller
                 'amount' => $amount,
                 'description' => $description,
             ],201);
+            Cache::flush();
 
             // Check if the insertion was successful
             if ($plan) {

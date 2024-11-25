@@ -22,6 +22,7 @@ class Plan extends Model
 
     protected $casts = [
         'amount' => 'array', // Automatically cast JSON field to array
+        'description' => 'array', // Automatically cast JSON field to array
     ];
 
 }
