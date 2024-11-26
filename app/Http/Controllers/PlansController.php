@@ -14,7 +14,6 @@ class PlansController extends Controller
     {
         try{
             $key = 'All_Plans';
-
             if (Cache::has($key)) {
                 $value = Cache::get($key);
 
@@ -70,7 +69,7 @@ class PlansController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Plan Retrived Successfully',
-                    'data' => $plan
+                    'data' => [$plan]
                 ],200);
             }
             else{
