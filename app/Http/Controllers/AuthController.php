@@ -178,17 +178,70 @@
 					}
     			}
 
-				public function logout()
+				public function logout(Request $request)
     			{
-        			try{
-						auth()->logout();
+        			// try{
+					// 	auth()->logout();
 
-        				return response()->json([
+        			// 	return response()->json([
+					// 		"status" => "success",
+					// 		"message" => "User logged out successfully.",
+					// 		"data" => null
+					// 	],204);
+					// }catch (\Exception $e) {
+					// 	Log::error("Logout error: " . $e->getMessage());
+					// 	return response()->json([
+					// 		'status' => 'error',
+					// 		'message' => 'An error occurred while logging out',
+					// 		'data' => null
+					// 	], 500);
+					// }
+
+					try {
+						// Get the access token from the Authorization header
+						$accessToken = auth()->getToken(); 
+				
+						// Invalidate the access token
+						auth()->logout();
+				
+						// Retrieve the refresh token from the request body
+						$refreshToken = $request->input('refresh_token');
+						if (!$refreshToken) {
+							return response()->json([
+								'status' => 'error',
+								'message' => 'Refresh token is required',
+								'data' => null
+							], 400);
+						}
+				
+						// Decode the refresh token to get its payload
+						$refreshTokenPayload = JWTAuth::setToken($refreshToken)->getPayload();
+				
+						// Ensure the token type is 'refresh'
+						if ($refreshTokenPayload->get('token_type') !== 'refresh') {
+							return response()->json([
+								'status' => 'error',
+								'message' => 'Invalid token type. Only refresh tokens can be invalidated here.',
+								'data' => null
+							], 403);
+						}
+				
+						// Invalidate the refresh token
+						JWTAuth::invalidate(JWTAuth::setToken($refreshToken));
+				
+						return response()->json([
 							"status" => "success",
-							"message" => "User logged out successfully.",
+							"message" => "User logged out and tokens invalidated successfully.",
 							"data" => null
-						],204);
-					}catch (\Exception $e) {
+						], 200);
+				
+					}catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+						return response()->json([
+							'status' => 'error',
+							'message' => 'Invalid token',
+							'data' => null
+						], 401);
+					}catch(\Exception $e) {
 						Log::error("Logout error: " . $e->getMessage());
 						return response()->json([
 							'status' => 'error',
