@@ -150,14 +150,15 @@
 							'message' => 'could not create token',
 							'data' => null
 						], 500);
-					}catch (\Exception $e) {
-						Log::error("Login error: " . $e->getMessage());
-						return response()->json([
-							'status' => 'error',
-							'message' => 'An error occurred during login',
-							'data' => null
-						], 500);
 					}
+					// catch (\Exception $e) {
+					// 	Log::error("Login error: " . $e->getMessage());
+					// 	return response()->json([
+					// 		'status' => 'error',
+					// 		'message' => 'An error occurred during login',
+					// 		'data' => null
+					// 	], 500);
+					// }
     			}
 
 				public function me()

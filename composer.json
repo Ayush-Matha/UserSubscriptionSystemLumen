@@ -9,7 +9,9 @@
         "flipbox/lumen-generator": "^9.3",
         "illuminate/log": "^10.48",
         "illuminate/mail": "^10.48",
+        "illuminate/redis": "^10.48",
         "laravel/lumen-framework": "^10.0",
+        "predis/predis": "^2.3",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {

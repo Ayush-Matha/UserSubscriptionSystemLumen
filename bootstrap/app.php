@@ -75,6 +75,8 @@ $app->configure('mail');
 
 $app->configure('queue');
 
+$app->configure('database');
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -118,6 +120,8 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
 
 $app->register(Illuminate\Queue\QueueServiceProvider::class);
+
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
